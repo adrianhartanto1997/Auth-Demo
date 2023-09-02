@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["views"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 Int                 @id @default(autoincrement())
+  email              String              @unique
+  name               String
+  password           String
+  hasVerifiedEmail   Boolean             @default(false) @map("has_verified_email")
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+  verificationTokens VerificationToken[]
+  logs               Log[]
+
+  @@map("users")
+}
+
+model VerificationToken {
+  id        Int      @id @default(autoincrement())
+  type      String   @db.VarChar(50)
+  userID    Int      @map("user_id")
+  user      User     @relation(fields: [userID], references: [id])
+  token     String
+  createdAt DateTime @default(now()) @map("created_at")
+  expiredAt DateTime @map("expired_at")
+
+  @@index([type])
+  @@map("verification_tokens")
+}
+
+model Log {
+  id        Int      @id @default(autoincrement())
+  type      String
+  userID    Int      @map("user_id")
+  user      User     @relation(fields: [userID], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([type])
+  @@map("logs")
+}
+
+view UsersView {
+  id               Int       @id
+  email            String
+  name             String
+  hasVerifiedEmail Boolean   @map("has_verified_email")
+  signUpDate       DateTime  @map("sign_up_date")
+  numLogin         Int       @map("num_login")
+  lastSession      DateTime? @map("last_session")
+
+  @@map("users_view")
+}
+
+view ActiveSessionView {
+  userID      Int      @map("user_id")
+  sessionDate DateTime @map("session_date")
+
+  @@id([userID, sessionDate])
+  @@map("active_session_view")
+}
