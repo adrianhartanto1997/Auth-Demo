@@ -7,7 +7,7 @@ passport.use(
     {
       clientID: process.env['GOOGLE_CLIENT_ID']!,
       clientSecret: process.env['GOOGLE_CLIENT_SECRET']!,
-      callbackURL: '/api/oauth2/redirect/google', // callback url on our app to verify authentication.
+      callbackURL: `${process.env['APP_HOST']}/api/oauth2/redirect/google`, // callback url on our app to verify authentication.
     },
     async (_accessToken, _refreshToken, profile, cb: any) => {
       try {
