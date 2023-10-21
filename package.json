@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "vercel-build": "cd src && prisma generate && prisma migrate deploy && cd .. && next build",
+    "vercel-build": "npm install -D encoding && cd src && prisma generate && prisma migrate deploy && cd .. && next build",
     "prisma:generate": "prisma generate"
   },
   "dependencies": {
