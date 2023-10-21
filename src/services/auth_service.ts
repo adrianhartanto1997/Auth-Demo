@@ -524,8 +524,8 @@ class AuthService {
     const accessToken = await generateAccessToken(userID)
     const sessionToken = await generateSessionToken(userID)
 
-    this.insertLog(typeLogin, userID)
-    this.insertLog(typeSession, userID)
+    await this.insertLog(typeLogin, userID)
+    await this.insertLog(typeSession, userID)
 
     return {
       accessToken,
