@@ -14,7 +14,7 @@ export async function POST(
   try {
     const userID = await validateSessionToken(params.sessionToken)
     if (userID) {
-      authService.insertLog(typeSession, userID)
+      await authService.insertLog(typeSession, userID)
     }
 
     return renderAPISuccessResponse(true)
